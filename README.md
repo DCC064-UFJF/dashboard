@@ -8,10 +8,10 @@ B : 0 = Atuador, 1 = Sensor;
 C : 0 = Atuador, 1 = Temperatura, 2 = Umidade etc.  
 001 a 999: Individualização.  
 
-O comportamento do middleware está sendo simulado por server.js presente na pasta mock-api  
+O comportamento do middleware está sendo simulado por server2.js
 
 para simular o middleware:    
-**node server.js**
+**node server2.js**
 
 ### para alterar dados do sensor:  
 (exemplo para sensor 212001 tendo valor alterado para 55.5)  
@@ -63,6 +63,10 @@ http://localhost:5001/circuits/{circuitId}/actuator/{actuatorId}/toggle
 Histórico de dados do sensor:  
 http://localhost:5001/circuits/{circuit_id}/sensor/{sensor_id}/all?start_date={start_date}&end_date={end_date}  
 
+Para gerar a imagem:
+docker build . -t dashboard
 
+Para gerar o container: 
+docker container run -p 1880:1880 dashboard
 
 
