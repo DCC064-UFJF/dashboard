@@ -2,10 +2,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const circuitSelect = document.createElement("select");
     circuitSelect.id = "circuitSelect";
     circuitSelect.className = "border p-2 rounded";
-    
+    const homeButton = document.getElementById("homeButton");
     const sensorSelect = document.getElementById("sensorSelect");
     const loadGraphButton = document.getElementById("loadGraph");
     const chartsContainer = document.getElementById("chartsContainer");
+    const startDateInput = document.getElementById("startDate");
+    const endDateInput = document.getElementById("endDate");
+
+    homeButton.addEventListener("click", () => {
+        window.location.href = "home2.html";
+    });
+
 
     // Adiciona a seleção de circuito no HTML antes do seletor de sensores
     const sensorContainer = sensorSelect.parentElement;
@@ -73,44 +80,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Função para carregar o gráfico do sensor selecionado
     async function loadGraph(circuitId, sensorId) {
         chartsContainer.innerHTML = ""; // Limpa gráficos antigos
-        
+    
         try {
             const response = await fetch(`http://localhost:5001/circuits/${circuitId}/devices`);
             if (!response.ok) throw new Error("Erro ao buscar dados");
-
+    
             const devices = await response.json();
             const sensor = devices.find(device => device.id == sensorId && device.tipo !== "Atuador");
-
+    
             if (!sensor || !sensor.registros || sensor.registros.length === 0) {
                 alert("Nenhum dado encontrado para esse sensor!");
                 return;
             }
-
+    
+            // Obtém as datas selecionadas
+            const startDate = startDateInput.value ? new Date(startDateInput.value).getTime() : null;
+            const endDate = endDateInput.value ? new Date(endDateInput.value).getTime() : null;
+    
+            // Filtra os registros com base no intervalo de datas
+            const filteredRecords = sensor.registros.filter(entry => {
+                const timestamp = new Date(entry.timestamp).getTime();
+                return (!startDate || timestamp >= startDate) && (!endDate || timestamp <= endDate);
+            });
+    
+            if (filteredRecords.length === 0) {
+                alert("Nenhum dado encontrado no intervalo selecionado!");
+                return;
+            }
+    
             // Criando o contêiner do gráfico
             const card = document.createElement("div");
             card.className = "bg-white p-4 rounded-lg shadow-md";
-
+    
             const title = document.createElement("h2");
             title.className = "text-xl font-semibold text-gray-700 text-center mb-2";
             title.textContent = `${sensor.tipo} (ID ${sensor.id})`;
-
+    
             const canvasContainer = document.createElement("div");
             canvasContainer.className = "relative chart-container";
-
+    
             const canvas = document.createElement("canvas");
             canvas.id = `chart-${sensorId}`;
             canvas.className = "w-full h-full";
-
+    
             canvasContainer.appendChild(canvas);
             card.appendChild(title);
             card.appendChild(canvasContainer);
             chartsContainer.appendChild(card);
-
+    
             // Preparando os dados do gráfico
             const ctx = canvas.getContext("2d");
-            const timestamps = sensor.registros.map(entry => new Date(entry.timestamp).toLocaleString());
-            const values = sensor.registros.map(entry => entry.valor);
-
+            const timestamps = filteredRecords.map(entry => new Date(entry.timestamp).toLocaleString());
+            const values = filteredRecords.map(entry => entry.valor);
+    
             new Chart(ctx, {
                 type: "line",
                 data: {
@@ -136,14 +158,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                         legend: { display: false }
                     }
                 }
-                
             });
-        
-
+    
         } catch (error) {
             console.error("Erro ao carregar gráfico:", error);
         }
     }
+    
 
     // Atualiza os sensores quando um circuito é selecionado
     circuitSelect.addEventListener("change", async (event) => {
@@ -163,11 +184,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         await loadGraph(circuitId, sensorId);
-
-
-        homeButton.addEventListener("click", () => {
-            window.location.href = "home2.html";
-        });
 
         resetButton.addEventListener("click", () => {
             circuitSelect.value = ""; // Reseta a seleção de circuito

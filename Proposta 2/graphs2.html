@@ -37,7 +37,7 @@
 
 
 
-    <div class="flex flex-col items-center space-y-4 ">
+    <div class="flex flex-row items-center gap-4 ">
         
         <!-- Seletor de datas em linha -->
         <div >
@@ -46,10 +46,17 @@
         </div>
 
         <!-- Botão de Carregar Gráfico -->
-        <button id="loadGraph" class="bg-blue-500 text-white p-2 rounded mt-2">
+        
+        <label for="startDate">Data Inicial:</label>
+        <input type="date" id="startDate" class="input-date">
+        
+        <label for="endDate">Data Final:</label>
+        <input type="date" id="endDate" class="input-date">
+        <button id="loadGraph" class="bg-blue-500 text-white p-2 rounded ">
             Carregar Gráfico
         </button>
     </div>
+
 
     <!-- Container para os gráficos -->
     <div id="chartsContainer" class="mt-8 flex flex-wrap gap-4 justify-center"></div>
