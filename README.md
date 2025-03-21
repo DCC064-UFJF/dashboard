@@ -69,4 +69,92 @@ docker build . -t dashboard
 Para gerar o container: 
 docker container run -p 1880:1880 dashboard
 
+Para o correto funcionamento dos gráficos, alocar os dados na rota:
+http://localhost:5001/circuits/{circuitId}/devices
+
+O formato do JSON utilizado deve ser:
+
+```json 
+{
+    "circuito_id": "1",
+    "id": 13,
+    "tipo": "Temperatura",
+    "registros": [
+      {
+        "timestamp": "2025-03-10T18:15:57.969Z",
+        "valor": 66.07
+      },
+      {
+        "timestamp": "2025-03-13T19:00:11.593Z",
+        "valor": 51.22
+      },
+      {
+        "timestamp": "2025-03-13T19:33:58.824Z",
+        "valor": 83.33
+      },
+      {
+        "timestamp": "2025-03-18T12:23:18.251Z",
+        "valor": 37.69
+      },
+      {
+        "timestamp": "2025-03-19T03:28:07.111Z",
+        "valor": 95.65
+      },
+      {
+        "timestamp": "2025-03-19T22:33:09.145Z",
+        "valor": 19.83
+      },
+      {
+        "timestamp": "2025-03-20T06:50:15.453Z",
+        "valor": 17.12
+      },
+      {
+        "timestamp": "2025-03-20T17:44:21.263Z",
+        "valor": 93.04
+      },
+      {
+        "timestamp": "2025-03-20T23:17:44.994Z",
+        "valor": 81.45
+      }
+    ]
+  },
+  {
+    "circuito_id": "1",
+    "id": 16,
+    "tipo": "Humidade",
+    "registros": [
+      {
+        "timestamp": "2025-03-12T03:08:33.524Z",
+        "valor": 24.02
+      },
+      {
+        "timestamp": "2025-03-12T08:36:58.077Z",
+        "valor": 9.09
+      },
+      {
+        "timestamp": "2025-03-12T19:11:35.702Z",
+        "valor": 65.81
+      },
+      {
+        "timestamp": "2025-03-14T23:18:05.039Z",
+        "valor": 13.75
+      },
+      {
+        "timestamp": "2025-03-16T04:38:41.286Z",
+        "valor": 19.48
+      },
+      {
+        "timestamp": "2025-03-16T10:44:43.212Z",
+        "valor": 18.6
+      },
+      {
+        "timestamp": "2025-03-18T06:27:44.528Z",
+        "valor": 67.45
+      },
+      {
+        "timestamp": "2025-03-20T10:14:00.794Z",
+        "valor": 42.21
+      }
+    ]
+  }
 
