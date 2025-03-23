@@ -69,6 +69,8 @@ docker build . -t dashboard
 Para gerar o container: 
 docker container run -p 1880:1880 dashboard
 
+Imagem do dashboard no DockerHub: gabrielpiresf/dashboard:latest
+
 Para o correto funcionamento dos gráficos, alocar os dados na rota:
 http://localhost:5001/circuits/{circuitId}/devices
 
@@ -157,4 +159,5 @@ O formato do JSON utilizado deve ser:
       }
     ]
   }
+
 
